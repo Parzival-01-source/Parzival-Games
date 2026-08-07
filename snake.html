@@ -12,7 +12,7 @@
 
 <style>
 
-body {
+body{
     background:#111827;
     color:white;
     text-align:center;
@@ -21,66 +21,58 @@ body {
 }
 
 
-h1 {
+h1{
     color:#22c55e;
 }
 
 
-button {
+button{
 
     border:none;
-    cursor:pointer;
-
+    border-radius:20px;
+    background:#22c55e;
 }
 
 
-#start {
+#start{
 
-    width:230px;
+    width:240px;
     height:90px;
-    font-size:38px;
-    border-radius:25px;
-    background:#22c55e;
+    font-size:40px;
     font-weight:bold;
 
 }
 
 
 
-canvas {
+canvas{
 
     display:none;
 
     background:black;
 
-    border:3px solid #22c55e;
+    border:4px solid #22c55e;
 
-    border-radius:15px;
-
-    margin-top:20px;
+    border-radius:20px;
 
 }
 
 
 
-.control {
+.control{
 
-    width:85px;
-    height:65px;
-
-    font-size:35px;
+    width:90px;
+    height:70px;
 
     margin:5px;
 
-    border-radius:18px;
-
-    background:#22c55e;
+    font-size:40px;
 
 }
 
 
 
-#gameArea {
+#gameArea{
 
     display:none;
 
@@ -89,12 +81,10 @@ canvas {
 
 </style>
 
-
 </head>
 
 
 <body>
-
 
 
 <div id="home">
@@ -103,8 +93,6 @@ canvas {
 <h1>🎮 GameWorld</h1>
 
 <h2>🐍 Snake</h2>
-
-<p>Il tuo gioco online</p>
 
 
 <button id="start" onclick="startGame()">
@@ -137,56 +125,32 @@ Punteggio:
 </p>
 
 
-
 <canvas id="game" width="300" height="300"></canvas>
 
 
 
-
 <div>
 
-<button class="control" onclick="move(0,-10)">
-⬆️
-</button>
+<button class="control" onclick="move(0,-10)">⬆️</button>
 
 </div>
-
-
 
 
 <div>
 
-<button class="control" onclick="move(-10,0)">
-⬅️
-</button>
+<button class="control" onclick="move(-10,0)">⬅️</button>
 
+<button class="control" onclick="move(0,10)">⬇️</button>
 
-<button class="control" onclick="move(0,10)">
-⬇️
-</button>
-
-
-<button class="control" onclick="move(10,0)">
-➡️
-</button>
-
+<button class="control" onclick="move(10,0)">➡️</button>
 
 </div>
 
 
-
-
-<button class="control" onclick="restart()">
-
-🔄
-
-</button>
-
+<button class="control" onclick="restart()">🔄</button>
 
 
 </div>
-
-
 
 
 
@@ -199,7 +163,6 @@ const canvas=document.getElementById("game");
 const ctx=canvas.getContext("2d");
 
 
-
 let snake;
 
 let food;
@@ -210,14 +173,12 @@ let dy;
 
 let score;
 
-let loop;
-
+let timer;
 
 
 
 
 function startGame(){
-
 
 document.getElementById("home").style.display="none";
 
@@ -228,10 +189,7 @@ canvas.style.display="inline";
 
 restart();
 
-
 }
-
-
 
 
 
@@ -241,19 +199,22 @@ function restart(){
 
 snake=[
 
-{x:150,y:150}
+{x:150,y:150},
+
+{x:140,y:150},
+
+{x:130,y:150}
 
 ];
 
 
 food={
 
-x:Math.floor(Math.random()*30)*10,
+x:Math.floor(Math.random()*28)*10,
 
-y:Math.floor(Math.random()*30)*10
+y:Math.floor(Math.random()*28)*10
 
 };
-
 
 
 dx=10;
@@ -267,14 +228,14 @@ score=0;
 document.getElementById("score").innerHTML=score;
 
 
-clearInterval(loop);
+clearInterval(timer);
 
 
-loop=setInterval(game,100);
-
+timer=setInterval(game,120);
 
 
 }
+
 
 
 
@@ -299,7 +260,6 @@ dy=y;
 
 
 
-
 function game(){
 
 
@@ -310,40 +270,45 @@ ctx.fillRect(0,0,300,300);
 
 
 
+// 🍎 mela grande
 
-// mela 🍎
 
-ctx.font="18px Arial";
+ctx.font="32px Arial";
 
 ctx.fillText(
+
 "🍎",
-food.x-3,
-food.y+16
+
+food.x-8,
+
+food.y+30
+
 );
 
 
 
 
 
-// serpente 🐍
+// 🐍 serpente grande
 
 
-snake.forEach((p,index)=>{
+snake.forEach((part,index)=>{
 
 
 if(index===0){
 
 
-ctx.font="20px Arial";
+// testa grande
 
+ctx.font="32px Arial";
 
 ctx.fillText(
 
 "🐍",
 
-p.x-4,
+part.x-8,
 
-p.y+18
+part.y+30
 
 );
 
@@ -352,32 +317,24 @@ p.y+18
 }else{
 
 
-ctx.fillStyle="#22c55e";
+// corpo altri serpenti
 
 
-ctx.beginPath();
+ctx.font="22px Arial";
 
+ctx.fillText(
 
-ctx.arc(
+"🐍",
 
-p.x+5,
+part.x-5,
 
-p.y+5,
-
-5,
-
-0,
-
-Math.PI*2
+part.y+22
 
 );
 
 
-ctx.fill();
-
 
 }
-
 
 
 });
@@ -389,20 +346,16 @@ ctx.fill();
 
 let head={
 
-
 x:snake[0].x+dx,
 
 y:snake[0].y+dy
-
 
 };
 
 
 
 
-
 snake.unshift(head);
-
 
 
 
@@ -417,17 +370,13 @@ score++;
 document.getElementById("score").innerHTML=score;
 
 
-
 food={
 
+x:Math.floor(Math.random()*28)*10,
 
-x:Math.floor(Math.random()*30)*10,
-
-y:Math.floor(Math.random()*30)*10
-
+y:Math.floor(Math.random()*28)*10
 
 };
-
 
 
 }else{
@@ -442,24 +391,19 @@ snake.pop();
 
 
 
-
-
 if(
-
 
 head.x<0 ||
 
-head.x>=300 ||
-
 head.y<0 ||
+
+head.x>=300 ||
 
 head.y>=300 ||
 
 snake.slice(1).some(p=>p.x===head.x && p.y===head.y)
 
-
 ){
-
 
 
 alert(
@@ -469,17 +413,13 @@ alert(
 );
 
 
-
 restart();
 
 
 }
 
 
-
-
 }
-
 
 
 
@@ -497,11 +437,9 @@ if(e.key==="ArrowUp")
 move(0,-10);
 
 
-
 if(e.key==="ArrowDown")
 
 move(0,10);
-
 
 
 if(e.key==="ArrowLeft")
@@ -509,17 +447,12 @@ if(e.key==="ArrowLeft")
 move(-10,0);
 
 
-
 if(e.key==="ArrowRight")
 
 move(10,0);
 
 
-
 });
-
-
-
 
 
 
@@ -534,9 +467,6 @@ let startX=0;
 let startY=0;
 
 
-
-
-
 canvas.addEventListener("touchstart",e=>{
 
 
@@ -549,57 +479,45 @@ startY=e.touches[0].clientY;
 
 
 
-
-
-
 canvas.addEventListener("touchend",e=>{
 
 
-let dxSwipe=e.changedTouches[0].clientX-startX;
+let x=e.changedTouches[0].clientX-startX;
 
-let dySwipe=e.changedTouches[0].clientY-startY;
-
-
-
-if(Math.abs(dxSwipe)>Math.abs(dySwipe)){
+let y=e.changedTouches[0].clientY-startY;
 
 
 
-if(dxSwipe>30)
+if(Math.abs(x)>Math.abs(y)){
+
+
+if(x>30)
 
 move(10,0);
 
 
-
-if(dxSwipe<-30)
+if(x<-30)
 
 move(-10,0);
-
 
 
 }else{
 
 
-
-if(dySwipe>30)
+if(y>30)
 
 move(0,10);
 
 
-
-if(dySwipe<-30)
+if(y<-30)
 
 move(0,-10);
-
 
 
 }
 
 
-
 });
-
-
 
 
 </script>
