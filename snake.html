@@ -1,115 +1,504 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Snake - GameWorld</title>
+
+<title>GameWorld - Snake</title>
+
 
 <style>
+
 body {
-    background: #111827;
-    color: white;
-    text-align: center;
-    font-family: Arial;
+
+    background:#111827;
+    color:white;
+    text-align:center;
+    font-family:Arial;
+    touch-action:none;
+
 }
+
 
 h1 {
-    color: #22c55e;
+
+    color:#22c55e;
+
 }
+
+
+button {
+
+    border:none;
+    cursor:pointer;
+
+}
+
+
+#start {
+
+    width:220px;
+    height:80px;
+    font-size:35px;
+    border-radius:20px;
+    background:#22c55e;
+    color:black;
+    font-weight:bold;
+
+}
+
+
 
 canvas {
-    background: black;
-    border: 3px solid #22c55e;
-    margin-top: 20px;
 
-    .control {
-    width: 80px;
-    height: 60px;
-    font-size: 35px;
-    margin: 5px;
-    border-radius: 15px;
-    background: #22c55e;
+    display:none;
+
+    background:black;
+
+    border:3px solid #22c55e;
+
+    margin-top:20px;
+
+    border-radius:15px;
+
 }
+
+
+
+.control {
+
+    width:80px;
+    height:60px;
+    font-size:35px;
+    margin:5px;
+    border-radius:15px;
+    background:#22c55e;
+
+}
+
+
+
+#gameArea {
+
+    display:none;
+
+}
+
+
+
 </style>
 
 </head>
 
+
+
 <body>
 
-<h1>🐍 Snake</h1>
-<p>Usa le frecce per muovere il serpente</p>
+
+
+<div id="home">
+
+<h1>🎮 GameWorld</h1>
+
+<h2>🐍 Snake</h2>
+
+<p>Il tuo gioco online</p>
+
+
+<button id="start" onclick="startGame()">
+
+▶️ GIOCA
+
+</button>
+
+
+</div>
+
+
+
+
+<div id="gameArea">
+
+
+<h1>🎮 GameWorld</h1>
+
+
+<h2>
+🐍 Snake
+</h2>
+
+
+<p>
+
+Punteggio:
+<span id="score">0</span>
+
+</p>
+
+
 
 <canvas id="game" width="300" height="300"></canvas>
-<div>
-<div>
-<button class="control" onclick="dx=0;dy=-10">⬆️</button>
-</div>
+
+
 
 <div>
-<button class="control" onclick="dx=-10;dy=0">⬅️</button>
-<button class="control" onclick="dx=0;dy=10">⬇️</button>
-<button class="control" onclick="dx=10;dy=0">➡️</button>
+
+
+<button class="control" onclick="move(0,-10)">
+⬆️
+</button>
+
+
 </div>
+
+
+
+<div>
+
+<button class="control" onclick="move(-10,0)">
+⬅️
+</button>
+
+
+<button class="control" onclick="move(0,10)">
+⬇️
+</button>
+
+
+<button class="control" onclick="move(10,0)">
+➡️
+</button>
+
+
+</div>
+
+
+
+<button class="control" onclick="restart()">
+
+🔄
+
+</button>
+
+
+</div>
+
+
+
+
 <script>
 
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
 
-let snake = [{x:150,y:150}];
-let food = {x:50,y:50};
-let dx = 10;
-let dy = 0;
+
+const canvas=document.getElementById("game");
+
+const ctx=canvas.getContext("2d");
+
+
+
+let snake;
+
+let food;
+
+let dx;
+
+let dy;
+
+let score;
+
+let loop;
+
+
+
+
+function startGame(){
+
+
+document.getElementById("home").style.display="none";
+
+
+document.getElementById("gameArea").style.display="block";
+
+
+canvas.style.display="inline";
+
+
+restart();
+
+
+}
+
+
+
+
+function restart(){
+
+
+snake=[
+{x:150,y:150}
+];
+
+
+food={
+
+x:Math.floor(Math.random()*30)*10,
+
+y:Math.floor(Math.random()*30)*10
+
+};
+
+
+dx=10;
+
+dy=0;
+
+
+score=0;
+
+
+document.getElementById("score").innerHTML=score;
+
+
+clearInterval(loop);
+
+
+loop=setInterval(game,100);
+
+
+
+}
+
+
+
+
+
+function move(x,y){
+
+
+if(x===-dx && y===-dy)
+return;
+
+
+dx=x;
+dy=y;
+
+
+}
+
+
+
+
 
 function game(){
 
+
+
 ctx.fillStyle="black";
+
 ctx.fillRect(0,0,300,300);
 
+
+
+// mela
+
 ctx.fillStyle="red";
-ctx.fillRect(food.x,food.y,10,10);
+
+ctx.fillRect(
+food.x,
+food.y,
+10,
+10
+);
+
+
+
+// serpente
 
 ctx.fillStyle="#22c55e";
 
-snake.forEach(part=>{
-ctx.fillRect(part.x,part.y,10,10);
+
+snake.forEach(p=>{
+
+
+ctx.fillRect(
+p.x,
+p.y,
+10,
+10
+);
+
+
 });
 
-let head = {
-x: snake[0].x + dx,
-y: snake[0].y + dy
+
+
+let head={
+
+x:snake[0].x+dx,
+
+y:snake[0].y+dy
+
 };
+
+
 
 snake.unshift(head);
 
-if(head.x===food.x && head.y===food.y){
+
+
+if(head.x===food.x &&
+head.y===food.y){
+
+
+score++;
+
+
+document.getElementById("score").innerHTML=score;
+
+
 food={
+
 x:Math.floor(Math.random()*30)*10,
+
 y:Math.floor(Math.random()*30)*10
+
 };
+
+
 }else{
+
+
 snake.pop();
+
+
 }
+
+
+
+
 
 if(
-head.x<0 || head.x>=300 ||
-head.y<0 || head.y>=300
+
+head.x<0 ||
+head.x>=300 ||
+head.y<0 ||
+head.y>=300 ||
+snake.slice(1).some(p=>p.x===head.x && p.y===head.y)
+
 ){
-alert("Game Over!");
-location.reload();
-}
+
+
+alert("Game Over! Punteggio: "+score);
+
+
+restart();
+
 
 }
 
-document.addEventListener("keydown", e=>{
-if(e.key==="ArrowUp"){dx=0;dy=-10;}
-if(e.key==="ArrowDown"){dx=0;dy=10;}
-if(e.key==="ArrowLeft"){dx=-10;dy=0;}
-if(e.key==="ArrowRight"){dx=10;dy=0;}
+
+}
+
+
+
+
+
+
+// tastiera
+
+document.addEventListener("keydown",e=>{
+
+
+if(e.key==="ArrowUp")
+move(0,-10);
+
+
+if(e.key==="ArrowDown")
+move(0,10);
+
+
+if(e.key==="ArrowLeft")
+move(-10,0);
+
+
+if(e.key==="ArrowRight")
+move(10,0);
+
+
 });
 
-setInterval(game,100);
+
+
+
+
+
+// swipe iPhone
+
+
+let startX;
+let startY;
+
+
+
+canvas.addEventListener("touchstart",e=>{
+
+
+startX=e.touches[0].clientX;
+
+startY=e.touches[0].clientY;
+
+
+});
+
+
+
+
+
+canvas.addEventListener("touchend",e=>{
+
+
+let x=e.changedTouches[0].clientX-startX;
+
+let y=e.changedTouches[0].clientY-startY;
+
+
+
+if(Math.abs(x)>Math.abs(y)){
+
+
+if(x>30)
+move(10,0);
+
+
+if(x<-30)
+move(-10,0);
+
+
+}else{
+
+
+if(y>30)
+move(0,10);
+
+
+if(y<-30)
+move(0,-10);
+
+
+}
+
+
+
+});
+
+
 
 </script>
 
+
 </body>
+
 </html>
