@@ -1,1 +1,369 @@
+<!DOCTYPE html>
+<html lang="it">
 
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>GameWorld - Basket</title>
+
+
+<style>
+
+body{
+
+margin:0;
+background:#111827;
+color:white;
+font-family:Arial;
+text-align:center;
+
+}
+
+
+header{
+
+background:#2563eb;
+padding:20px;
+font-size:30px;
+font-weight:bold;
+
+}
+
+
+canvas{
+
+background:#0f172a;
+border:4px solid #22c55e;
+border-radius:20px;
+margin-top:20px;
+
+}
+
+
+button{
+
+background:#22c55e;
+color:white;
+border:none;
+padding:15px 30px;
+font-size:25px;
+border-radius:15px;
+
+}
+
+
+#reward{
+
+display:none;
+
+position:fixed;
+
+top:15%;
+
+left:10%;
+
+width:80%;
+
+background:#1f2937;
+
+padding:25px;
+
+border-radius:20px;
+
+}
+
+
+#reward img{
+
+width:180px;
+
+}
+
+
+</style>
+
+</head>
+
+
+
+<body>
+
+
+
+<header>
+
+🎮 GameWorld
+
+</header>
+
+
+<h1>🏀 Basket</h1>
+
+
+<h2>
+
+Punti:
+<span id="score">0</span>
+
+</h2>
+
+
+
+<canvas id="game" width="350" height="500"></canvas>
+
+
+<br>
+
+
+<button onclick="shoot()">
+
+🏀 TIRA
+
+</button>
+
+
+
+
+<div id="reward">
+
+
+<img src="immagini/jordan.png">
+
+
+<h2>
+
+Continua così! 🔥
+
+</h2>
+
+
+<button onclick="closeReward()">
+
+Continua
+
+</button>
+
+
+</div>
+
+
+
+
+
+
+
+<script>
+
+
+const canvas=document.getElementById("game");
+
+const ctx=canvas.getContext("2d");
+
+
+
+let score=0;
+
+
+let power=0;
+
+
+let speed=3;
+
+
+let dir=1;
+
+
+let shooting=false;
+
+
+let ballY=420;
+
+
+
+
+function game(){
+
+
+
+ctx.clearRect(0,0,350,500);
+
+
+
+// campo
+
+ctx.fillStyle="#166534";
+
+ctx.fillRect(0,450,350,50);
+
+
+
+// canestro
+
+ctx.font="80px Arial";
+
+ctx.fillText("🏀",135,100);
+
+
+
+// mano
+
+ctx.font="60px Arial";
+
+ctx.fillText("🤚",140,460);
+
+
+
+// palla
+
+ctx.font="45px Arial";
+
+ctx.fillText("🏀",150,ballY);
+
+
+
+
+// barra calibrazione
+
+
+ctx.fillStyle="red";
+
+ctx.fillRect(40,250,270,35);
+
+
+
+ctx.fillStyle="yellow";
+
+ctx.fillRect(120,250,110,35);
+
+
+
+ctx.fillStyle="lime";
+
+ctx.fillRect(160,250,30,35);
+
+
+
+// cursore tiro
+
+ctx.fillStyle="white";
+
+ctx.fillRect(40+power,240,8,55);
+
+
+
+
+
+if(!shooting){
+
+
+power += speed*dir;
+
+
+if(power>270 || power<0){
+
+dir*=-1;
+
+}
+
+
+
+}else{
+
+
+ballY-=10;
+
+
+
+if(ballY<120){
+
+
+
+// controllo precisione
+
+
+if(power>120 && power<200){
+
+
+score++;
+
+
+document.getElementById("score").innerHTML=score;
+
+
+
+if(score%10===0){
+
+showReward();
+
+}
+
+
+}
+
+
+
+ballY=420;
+
+shooting=false;
+
+
+}
+
+
+
+}
+
+
+}
+
+
+
+
+function shoot(){
+
+
+if(!shooting){
+
+shooting=true;
+
+}
+
+
+}
+
+
+
+
+
+function showReward(){
+
+document.getElementById("reward").style.display="block";
+
+}
+
+
+
+function closeReward(){
+
+document.getElementById("reward").style.display="none";
+
+}
+
+
+
+
+
+setInterval(game,30);
+
+
+
+</script>
+
+
+
+</body>
+
+</html>
