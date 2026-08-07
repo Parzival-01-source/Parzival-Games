@@ -32,7 +32,15 @@ canvas {
 <p>Usa le frecce per muovere il serpente</p>
 
 <canvas id="game" width="300" height="300"></canvas>
+<div>
+<button onclick="dx=0;dy=-10">⬆️</button>
+</div>
 
+<div>
+<button onclick="dx=-10;dy=0">⬅️</button>
+<button onclick="dx=0;dy=10">⬇️</button>
+<button onclick="dx=10;dy=0">➡️</button>
+</div>
 <script>
 
 const canvas = document.getElementById("game");
