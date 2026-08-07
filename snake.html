@@ -13,20 +13,16 @@
 <style>
 
 body {
-
     background:#111827;
     color:white;
     text-align:center;
     font-family:Arial;
     touch-action:none;
-
 }
 
 
 h1 {
-
     color:#22c55e;
-
 }
 
 
@@ -40,12 +36,11 @@ button {
 
 #start {
 
-    width:220px;
-    height:80px;
-    font-size:35px;
-    border-radius:20px;
+    width:230px;
+    height:90px;
+    font-size:38px;
+    border-radius:25px;
     background:#22c55e;
-    color:black;
     font-weight:bold;
 
 }
@@ -60,9 +55,9 @@ canvas {
 
     border:3px solid #22c55e;
 
-    margin-top:20px;
-
     border-radius:15px;
+
+    margin-top:20px;
 
 }
 
@@ -70,11 +65,15 @@ canvas {
 
 .control {
 
-    width:80px;
-    height:60px;
+    width:85px;
+    height:65px;
+
     font-size:35px;
+
     margin:5px;
-    border-radius:15px;
+
+    border-radius:18px;
+
     background:#22c55e;
 
 }
@@ -88,11 +87,10 @@ canvas {
 }
 
 
-
 </style>
 
-</head>
 
+</head>
 
 
 <body>
@@ -100,6 +98,7 @@ canvas {
 
 
 <div id="home">
+
 
 <h1>🎮 GameWorld</h1>
 
@@ -120,15 +119,14 @@ canvas {
 
 
 
+
 <div id="gameArea">
 
 
 <h1>🎮 GameWorld</h1>
 
 
-<h2>
-🐍 Snake
-</h2>
+<h2>🐍 Snake</h2>
 
 
 <p>
@@ -144,15 +142,15 @@ Punteggio:
 
 
 
-<div>
 
+<div>
 
 <button class="control" onclick="move(0,-10)">
 ⬆️
 </button>
 
-
 </div>
+
 
 
 
@@ -177,6 +175,7 @@ Punteggio:
 
 
 
+
 <button class="control" onclick="restart()">
 
 🔄
@@ -184,13 +183,15 @@ Punteggio:
 </button>
 
 
+
 </div>
 
 
 
 
-<script>
 
+
+<script>
 
 
 const canvas=document.getElementById("game");
@@ -214,14 +215,13 @@ let loop;
 
 
 
+
 function startGame(){
 
 
 document.getElementById("home").style.display="none";
 
-
 document.getElementById("gameArea").style.display="block";
-
 
 canvas.style.display="inline";
 
@@ -234,11 +234,15 @@ restart();
 
 
 
+
+
 function restart(){
 
 
 snake=[
+
 {x:150,y:150}
+
 ];
 
 
@@ -249,6 +253,7 @@ x:Math.floor(Math.random()*30)*10,
 y:Math.floor(Math.random()*30)*10
 
 };
+
 
 
 dx=10;
@@ -279,10 +284,12 @@ function move(x,y){
 
 
 if(x===-dx && y===-dy)
+
 return;
 
 
 dx=x;
+
 dy=y;
 
 
@@ -292,8 +299,8 @@ dy=y;
 
 
 
-function game(){
 
+function game(){
 
 
 ctx.fillStyle="black";
@@ -302,46 +309,95 @@ ctx.fillRect(0,0,300,300);
 
 
 
-// mela
 
-ctx.fillStyle="red";
 
-ctx.fillRect(
-food.x,
-food.y,
-10,
-10
+// mela 🍎
+
+ctx.font="18px Arial";
+
+ctx.fillText(
+"🍎",
+food.x-3,
+food.y+16
 );
 
 
 
-// serpente
+
+
+// serpente 🐍
+
+
+snake.forEach((p,index)=>{
+
+
+if(index===0){
+
+
+ctx.font="20px Arial";
+
+
+ctx.fillText(
+
+"🐍",
+
+p.x-4,
+
+p.y+18
+
+);
+
+
+
+}else{
+
 
 ctx.fillStyle="#22c55e";
 
 
-snake.forEach(p=>{
+ctx.beginPath();
 
 
-ctx.fillRect(
-p.x,
-p.y,
-10,
-10
+ctx.arc(
+
+p.x+5,
+
+p.y+5,
+
+5,
+
+0,
+
+Math.PI*2
+
 );
+
+
+ctx.fill();
+
+
+}
+
 
 
 });
 
 
 
+
+
+
 let head={
+
 
 x:snake[0].x+dx,
 
 y:snake[0].y+dy
 
+
 };
+
+
 
 
 
@@ -349,8 +405,10 @@ snake.unshift(head);
 
 
 
-if(head.x===food.x &&
-head.y===food.y){
+
+
+
+if(head.x===food.x && head.y===food.y){
 
 
 score++;
@@ -359,13 +417,17 @@ score++;
 document.getElementById("score").innerHTML=score;
 
 
+
 food={
+
 
 x:Math.floor(Math.random()*30)*10,
 
 y:Math.floor(Math.random()*30)*10
 
+
 };
+
 
 
 }else{
@@ -380,18 +442,32 @@ snake.pop();
 
 
 
+
+
 if(
 
+
 head.x<0 ||
+
 head.x>=300 ||
+
 head.y<0 ||
+
 head.y>=300 ||
+
 snake.slice(1).some(p=>p.x===head.x && p.y===head.y)
+
 
 ){
 
 
-alert("Game Over! Punteggio: "+score);
+
+alert(
+
+"Game Over! Punteggio: "+score
+
+);
+
 
 
 restart();
@@ -400,7 +476,10 @@ restart();
 }
 
 
+
+
 }
+
 
 
 
@@ -409,23 +488,32 @@ restart();
 
 // tastiera
 
+
 document.addEventListener("keydown",e=>{
 
 
 if(e.key==="ArrowUp")
+
 move(0,-10);
 
 
+
 if(e.key==="ArrowDown")
+
 move(0,10);
 
 
+
 if(e.key==="ArrowLeft")
+
 move(-10,0);
 
 
+
 if(e.key==="ArrowRight")
+
 move(10,0);
+
 
 
 });
@@ -435,11 +523,17 @@ move(10,0);
 
 
 
+
+
+
 // swipe iPhone
 
 
-let startX;
-let startY;
+let startX=0;
+
+let startY=0;
+
+
 
 
 
@@ -457,35 +551,46 @@ startY=e.touches[0].clientY;
 
 
 
+
 canvas.addEventListener("touchend",e=>{
 
 
-let x=e.changedTouches[0].clientX-startX;
+let dxSwipe=e.changedTouches[0].clientX-startX;
 
-let y=e.changedTouches[0].clientY-startY;
-
-
-
-if(Math.abs(x)>Math.abs(y)){
+let dySwipe=e.changedTouches[0].clientY-startY;
 
 
-if(x>30)
+
+if(Math.abs(dxSwipe)>Math.abs(dySwipe)){
+
+
+
+if(dxSwipe>30)
+
 move(10,0);
 
 
-if(x<-30)
+
+if(dxSwipe<-30)
+
 move(-10,0);
+
 
 
 }else{
 
 
-if(y>30)
+
+if(dySwipe>30)
+
 move(0,10);
 
 
-if(y<-30)
+
+if(dySwipe<-30)
+
 move(0,-10);
+
 
 
 }
@@ -493,6 +598,7 @@ move(0,-10);
 
 
 });
+
 
 
 
